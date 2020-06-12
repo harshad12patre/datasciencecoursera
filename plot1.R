@@ -1,0 +1,11 @@
+# SCC <- readRDS("D:/r-projects/Source_Classification_Code.rds")
+# NEI <- readRDS("D:/r-projects/summarySCC_PM25.rds")
+
+avg <- with(NEI, tapply(Emissions, year, mean, na.rm = TRUE))
+year <- as.numeric(names(avg))
+avg <- as.numeric(avg)
+df <- data.frame(avg = avg, year = year)
+png(filename = "plot1.png")
+par(mar = c(5, 5, 1, 1))
+plot1 <- plot(year, avg, xlab = "Year", ylab = "Average PM2.5 Emission(in tonnes)", type = "b")
+dev.off()
