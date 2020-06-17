@@ -4,6 +4,7 @@ SCC <- readRDS("D:/r-projects/Source_Classification_Code.rds")
 NEI <- readRDS("D:/r-projects/summarySCC_PM25.rds")
 
 data <- NEI %>%
+  filter(fips == "24510") %>%
   group_by(year) %>%
   summarize(avg = mean(Emissions, na.rm = TRUE))
 

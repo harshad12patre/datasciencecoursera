@@ -9,5 +9,5 @@ data <- NEI %>%
 
 png(filename = "plot1.png")
 par(mar = c(5, 5, 1, 1))
-plot(year, avg, xlab = "Year", ylab = "Average PM2.5 Emission in US(in tonnes)", type = "b")
+plot(data$year, data$avg, xlab = "Year", ylab = "Average PM2.5 Emission in US(in tonnes)", type = "b")
 dev.off()
