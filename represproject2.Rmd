@@ -36,30 +36,18 @@ colnames(data)
 Subset the dataset on the parameters of interest. Basically, we remove the columns we don't need for clarity. 
 ```{r DataSubsetting, results="hide"}
 # Finding columns to remove
-cols2Remove <- colnames(data[, !c("EVTYPE"
-  , "FATALITIES"
-  , "INJURIES"
-  , "PROPDMG"
-  , "PROPDMGEXP"
-  , "CROPDMG"
-  , "CROPDMGEXP")])
+cols2Remove <- colnames(data[, !c("EVTYPE", "FATALITIES", "INJURIES", "PROPDMG", "PROPDMGEXP", "CROPDMG", "CROPDMGEXP")])
 # Removing columns
 data[, c(cols2Remove) := NULL]
 # Only use data where fatalities or injuries occurred.  
 data <- data[(EVTYPE != "?" & 
-             (INJURIES > 0 | FATALITIES > 0 | PROPDMG > 0 | CROPDMG > 0)), c("EVTYPE"
-                                                                            , "FATALITIES"
-                                                                            , "INJURIES"
-                                                                            , "PROPDMG"
-                                                                            , "PROPDMGEXP"
-                                                                            , "CROPDMG"
-                                                                            , "CROPDMGEXP") ]
+             (INJURIES > 0 | FATALITIES > 0 | PROPDMG > 0 | CROPDMG > 0)), c("EVTYPE", "FATALITIES", "INJURIES", "PROPDMG", "PROPDMGEXP", "CROPDMG", "CROPDMGEXP") ]
 ```
 
 ### 2.4: Converting Exponent Columns into Actual Exponents instead of (-,+, H, K, etc)
 
 Making the PROPDMGEXP and CROPDMGEXP columns cleaner so they can be used to calculate property and crop cost.
-```{r CorrectingExponents, results="hide"}
+```{r CorrectingExponents, results="hide", echo = FALSE}
 # Change all damage exponents to uppercase.
 cols <- c("PROPDMGEXP", "CROPDMGEXP")
 data[,  (cols) := c(lapply(.SD, toupper)), .SDcols = cols]
@@ -132,7 +120,7 @@ head(bad_stuff, 5)
 # Create chart
 healthChart <- ggplot(bad_stuff, aes(x=reorder(EVTYPE, -value), y=value))
 # Plot data as bar chart
-healthChart = healthChart + geom_bar(stat="identity", aes(fill=bad_thing), position="dodge")
+healthChart = healthChart + geom_bar(stat="identity", aes(col=bad_thing), position="dodge")
 # Format y-axis scale and set y-axis label
 healthChart = healthChart + ylab("Frequency Count") 
 # Set x-axis label
@@ -156,7 +144,7 @@ head(econ_consequences, 5)
 # Create chart
 econChart <- ggplot(econ_consequences, aes(x=reorder(EVTYPE, -value), y=value))
 # Plot data as bar chart
-econChart = econChart + geom_bar(stat="identity", aes(fill=Damage_Type), position="dodge")
+econChart = econChart + geom_bar(stat="identity", aes(col=Damage_Type), position="dodge")
 # Format y-axis scale and set y-axis label
 econChart = econChart + ylab("Cost (dollars)") 
 # Set x-axis label
