@@ -1,0 +1,77 @@
+---
+title: "Regression Models Project"
+author: "Harshad B."
+date: "07/09/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Tasks
+
+Take the *mtcars* data set and write up an analysis to answer their question using regression models and exploratory data analyses.
+
+## Executive Summary
+
+The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).
+
+A data frame with 32 observations on 11 (numeric) variables.
+
+[, 1]	mpg	Miles/(US) gallon
+[, 2]	cyl	Number of cylinders
+[, 3]	disp	Displacement (cu.in.)
+[, 4]	hp	Gross horsepower
+[, 5]	drat	Rear axle ratio
+[, 6]	wt	Weight (1000 lbs)
+[, 7]	qsec	1/4 mile time
+[, 8]	vs	Engine (0 = V-shaped, 1 = straight)
+[, 9]	am	Transmission (0 = automatic, 1 = manual)
+[,10]	gear	Number of forward gears
+[,11]	carb	Number of carburetors
+
+Loading the dataset:
+
+```{r cars}
+data(mtcars)
+summary(mtcars)
+```
+
+```{r pressure}
+mtcars$drat <- factor(mtcars$drat)
+mtcars$cyl <- factor(mtcars$cyl)
+mtcars$vs <- factor(mtcars$vs)
+mtcars$gear <- factor(mtcars$gear)
+mtcars$carb <- factor(mtcars$carb)
+mtcars$am <- factor(mtcars$am,labels=c('Automatic','Manual'))
+```
+
+## Regression Model
+
+``` {r}
+full.model <- lm(mpg ~ ., data = mtcars)
+best.model <- step(full.model, direction = "backward")
+```
+
+```{r}
+summary(best.model)
+```
+
+A test to determine the difference in mpg between the automatic and manual transmissions.
+
+``` {r}
+t.test(mpg ~ am, data = mtcars)
+```
+
+Boxplot for the same
+
+``` {r}
+boxplot(mpg ~ am, data = mtcars, col = "blue", ylab = "miles per gallon")
+```
+
+The boxplot confirms the result.
+
+## Conclusion
+
+Therefore, in conclusion, it can be state that number of cylinders and displacement are good predictors of fuel efficiency, but transmission type is not.
