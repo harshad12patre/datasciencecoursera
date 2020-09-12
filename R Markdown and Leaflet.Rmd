@@ -1,0 +1,17 @@
+---
+title: "Developing Data Products - R Markdown and Leaflet"
+author: "Harshad B."
+date: "13/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(leaflet)
+```
+
+```{r pressure, echo=FALSE}
+Map <- leaflet() %>%
+  addTiles() %>%   
+  addMarkers(lat=27.1751, lng=78.0421)
+Map
+```

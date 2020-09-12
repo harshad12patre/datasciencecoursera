@@ -1,0 +1,16 @@
+---
+title: "Developing Data Products - R Markdown and Plotly"
+author: "Harshad B."
+date: "13/09/2020"
+output: html_document
+---
+
+Plotting an easy volcano graph in plotly
+
+```{r setup, include=FALSE}
+library(plotly)
+```
+
+```{r pressure}
+plot_ly(z = volcano, type = "surface")
+```
