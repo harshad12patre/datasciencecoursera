@@ -35,10 +35,30 @@ Slide With Code
 
 The data used in the app comes from the GaltonFamilies dataset. 
 
-```{r summary}
+
+```r
 library(HistData)
 data(GaltonFamilies)
 summary(GaltonFamilies)
+```
+
+```
+     family        father         mother      midparentHeight    children     
+ 185    : 15   Min.   :62.0   Min.   :58.00   Min.   :64.40   Min.   : 1.000  
+ 066    : 11   1st Qu.:68.0   1st Qu.:63.00   1st Qu.:68.14   1st Qu.: 4.000  
+ 120    : 11   Median :69.0   Median :64.00   Median :69.25   Median : 6.000  
+ 130    : 11   Mean   :69.2   Mean   :64.09   Mean   :69.21   Mean   : 6.171  
+ 166    : 11   3rd Qu.:71.0   3rd Qu.:65.88   3rd Qu.:70.14   3rd Qu.: 8.000  
+ 097    : 10   Max.   :78.5   Max.   :70.50   Max.   :75.43   Max.   :15.000  
+ (Other):865                                                                  
+    childNum         gender     childHeight   
+ Min.   : 1.000   female:453   Min.   :56.00  
+ 1st Qu.: 2.000   male  :481   1st Qu.:64.00  
+ Median : 3.000                Median :66.50  
+ Mean   : 3.586                Mean   :66.75  
+ 3rd Qu.: 5.000                3rd Qu.:69.70  
+ Max.   :15.000                Max.   :79.00  
+                                              
 ```
 
 Slide With Plot
@@ -46,9 +66,4 @@ Slide With Plot
 
 In the scatterplot below are represented the data used for the prediction model.
 
-```{r plot, echo=FALSE}
-library(HistData)
-data(GaltonFamilies)
-plot(jitter(GaltonFamilies$childHeight) ~ GaltonFamilies$midparentHeight,xlab="Average Height of the Parents (in inches)",ylab="Height of the Child (in inches)",main="Scatterplot of Galton Family Data",pch=19,frame.plot=FALSE,col=ifelse(GaltonFamilies$gender=="female", "pink", "light blue"))
-legend(65,80,pch=c(19,19),col=c("pink","light blue"),c("female", "male"),bty="o",cex=.8)
-```
+![plot of chunk plot](SARP_presentation-figure/plot-1.png)
