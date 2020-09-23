@@ -25,10 +25,10 @@ Second Slide
 Using the data provided by Galton Families dataset, we fit a linear model to predict a child's height based on the gender and parent's average height.
 
 The application is running on 
-(http://rpubs.com/harshad12patre/sarpcp)
+(https://harshad12patre.shinyapps.io/SARPCP/)
 
 ui.R, and Server.R Code in my github repository
-(https://github.com/harshad12patre/datasciencecoursera/tree/master/SARP)
+(https://github.com/harshad12patre/datasciencecoursera/tree/master/SARP/SARPCP)
 
 Slide With Code
 ========================================================
