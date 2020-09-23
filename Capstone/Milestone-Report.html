@@ -380,28 +380,62 @@ summary {
 </ol>
 <p>The provided text data are provided in four different languages. This project will only focus on the English corpora.</p>
 </div>
-<div id="tasks-to-accomplish" class="section level3">
-<h3>Tasks to accomplish:</h3>
+<div id="tasks-to-be-accomplished" class="section level3">
+<h3>Tasks to be accomplished</h3>
+<p>The following tasks are to be accomplished in this milestone report.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Task 1:</strong></li>
+</ol>
 <ul>
 <li>Exploratory analysis - perform a thorough exploratory analysis of the data, understanding the distribution of words and relationship between the words in the corpora.</li>
 <li>Understand frequencies of words and word pairs - build figures and tables to understand variation in the frequencies of words and word pairs in the data.</li>
 </ul>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Task 2:</strong></li>
+</ol>
+<ul>
+<li>Build basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.</li>
+<li>Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn’t observed</li>
+</ul>
 </div>
-<div id="load-the-data" class="section level3">
-<h3>Load the Data</h3>
-<p>Download, unzip and load the training data.</p>
+<div id="load-the-libraries-and-data" class="section level3">
+<h3>Load the Libraries and Data</h3>
+<p>First, we will load all the necessary libraries.</p>
+<pre class="r"><code>suppressMessages(suppressWarnings(library(NLP)))
+suppressMessages(suppressWarnings(library(tm)))
+suppressMessages(suppressWarnings(library(RColorBrewer)))
+suppressMessages(suppressWarnings(library(wordcloud)))
+suppressMessages(suppressWarnings(library(dplyr)))
+suppressMessages(suppressWarnings(library(stringi)))
+suppressMessages(suppressWarnings(library(RWeka)))
+suppressMessages(suppressWarnings(library(ggplot2)))
+suppressMessages(suppressWarnings(library(ngram)))
+suppressMessages(suppressWarnings(library(quanteda)))
+suppressMessages(suppressWarnings(library(gridExtra)))</code></pre>
+<p>Now, loading the downloaded training data.</p>
 <pre class="r"><code># blogs
-blogs&lt;-file(&quot;C:/Users/harsh/Desktop/en_US/en_US.blogs.txt&quot;,&quot;r&quot;)
-suppressWarnings(blogs_lines&lt;-readLines(blogs))
-close(blogs)
+blogs_file &lt;- file(&quot;C:/Users/harsh/Desktop/en_US/en_US.blogs.txt&quot;,&quot;r&quot;)
+suppressWarnings(blogs_lines &lt;- readLines(blogs_file, encoding=&quot;UTF-8&quot;))
+close(blogs_file)
 # news
-news&lt;-file(&quot;C:/Users/harsh/Desktop/en_US/en_US.news.txt&quot;,&quot;r&quot;)
-suppressWarnings(news_lines&lt;-readLines(news))
-close(news)
+news_file &lt;- file(&quot;C:/Users/harsh/Desktop/en_US/en_US.news.txt&quot;,&quot;r&quot;)
+suppressWarnings(news_lines &lt;- readLines(news_file, encoding=&quot;UTF-8&quot;))
+close(news_file)
 # twitter
-twitter&lt;-file(&quot;C:/Users/harsh/Desktop/en_US/en_US.twitter.txt&quot;,&quot;r&quot;)
-suppressWarnings(twitter_lines&lt;-readLines(twitter))
-close(twitter)</code></pre>
+twitter_file &lt;- file(&quot;C:/Users/harsh/Desktop/en_US/en_US.twitter.txt&quot;,&quot;r&quot;)
+suppressWarnings(twitter_lines &lt;- readLines(twitter_file, encoding=&quot;UTF-8&quot;))
+close(twitter_file)</code></pre>
+<p>Here’s an overall summary of the data.</p>
+<pre class="r"><code>summary &lt;- sapply(list(blogs_file,news_file,twitter_file),function(x) summary(stri_count_words(x))[c(&#39;Min.&#39;,&#39;Mean&#39;,&#39;Max.&#39;)])
+rownames(summary) &lt;- c(&#39;Min&#39;,&#39;Mean&#39;,&#39;Max&#39;)
+stats &lt;- data.frame(
+  FileName=c(&quot;en_US.blogs&quot;,&quot;en_US.news&quot;,&quot;en_US.twitter&quot;),      
+  t(rbind(sapply(list(blogs_file,news_file,twitter_file),stri_stats_general)[c(&#39;Lines&#39;,&#39;Chars&#39;),],  Words = sapply(list(blogs_file,news_file,twitter_file),stri_stats_latex)[&#39;Words&#39;,], summary)))
+head(stats)</code></pre>
+<pre><code>##        FileName Lines Chars Words Min Mean Max
+## 1   en_US.blogs     1     1     0   1    1   1
+## 2    en_US.news     1     1     0   1    1   1
+## 3 en_US.twitter     1     1     0   1    1   1</code></pre>
 </div>
 
 
