@@ -1,0 +1,46 @@
+---
+title: "Data Science Capstone - Milestone Report"
+author: "Harshad B."
+date: "23/09/2020"
+output: html_document
+---
+
+### Introduction
+
+This is the Milestone Report for Data Science: Capstone Project - Week 2 authorized by John Hopkins University offered through Coursera. The objective of this report is to develop an understanding of the dataset provided as part of the project. These preliminary insights into the data will help us when we build the next work prediction mode. We will perform basic exploratory data analysis, and take a look at this dataset.
+
+The model will be trained using a unified document corpus compiled from the
+following three sources of text data:
+
+1. Blogs
+1. News
+1. Twitter
+
+The provided text data are provided in four different languages. This project
+will only focus on the English corpora.
+
+### Tasks to accomplish:
+
+- Exploratory analysis - perform a thorough exploratory analysis of the data, understanding the distribution of words and relationship between the words in the corpora.
+- Understand frequencies of words and word pairs - build figures and tables to understand variation in the frequencies of words and word pairs in the data.
+
+### Load the Data
+
+Download, unzip and load the training data.
+
+```{r load-data, echo = TRUE}
+# blogs
+blogs<-file("C:/Users/harsh/Desktop/en_US/en_US.blogs.txt","r")
+suppressWarnings(blogs_lines<-readLines(blogs))
+close(blogs)
+# news
+news<-file("C:/Users/harsh/Desktop/en_US/en_US.news.txt","r")
+suppressWarnings(news_lines<-readLines(news))
+close(news)
+# twitter
+twitter<-file("C:/Users/harsh/Desktop/en_US/en_US.twitter.txt","r")
+suppressWarnings(twitter_lines<-readLines(twitter))
+close(twitter)
+```
+
+
