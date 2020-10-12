@@ -10,25 +10,25 @@ suppressMessages(suppressWarnings(library(ngram)))
 suppressMessages(suppressWarnings(library(quanteda)))
 suppressMessages(suppressWarnings(library(gridExtra)))
 
-# # blogs
-# blogs_file <- "C:/Users/harsh/Desktop/en_US/en_US.blogs.txt"
-# cnxn <- file(blogs_file, open="rb")
-# suppressWarnings(blogs_lines <- readLines(cnxn, encoding="UTF-8"))
-# close(cnxn)
-# 
-# # news
-# news_file <- "C:/Users/harsh/Desktop/en_US/en_US.news.txt"
-# cnxn <- file(news_file, open="rb")
-# suppressWarnings(news_lines <- readLines(cnxn, encoding="UTF-8"))
-# close(cnxn)
-# 
-# # twitter
-# twitter_file <- "C:/Users/harsh/Desktop/en_US/en_US.twitter.txt"
-# cnxn <- file(twitter_file, open="rb")
-# suppressWarnings(twitter_lines <- readLines(cnxn, encoding="UTF-8"))
-# close(cnxn)
-# 
-# rm(cnxn)
+# blogs
+blogs_file <- "C:/Users/harsh/Desktop/en_US/en_US.blogs.txt"
+cnxn <- file(blogs_file, open="rb")
+suppressWarnings(blogs_lines <- readLines(cnxn, encoding="UTF-8"))
+close(cnxn)
+
+# news
+news_file <- "C:/Users/harsh/Desktop/en_US/en_US.news.txt"
+cnxn <- file(news_file, open="rb")
+suppressWarnings(news_lines <- readLines(cnxn, encoding="UTF-8"))
+close(cnxn)
+
+# twitter
+twitter_file <- "C:/Users/harsh/Desktop/en_US/en_US.twitter.txt"
+cnxn <- file(twitter_file, open="rb")
+suppressWarnings(twitter_lines <- readLines(cnxn, encoding="UTF-8"))
+close(cnxn)
+
+rm(cnxn)
 
 #File Summary
 summary <- sapply(list(blogs_lines,news_lines,twitter_lines),function(x) summary(stri_count_words(x))[c('Min.','Mean','Max.')])
