@@ -1,0 +1,198 @@
+---
+title: "Data Science Capstone - Milestone Report"
+author: "Harshad B."
+date: "09/05/2021"
+output: html_document
+---
+
+### Introduction
+
+This is the Milestone Report for Data Science: Capstone Project - Week 2 provided by John Hopkins University on the Coursera platform. The goal of this milestone project report is to display that I understand how to work with the data and that I am on track to create my prediction algorithm. A basic understanding of the dataset will be developed by performing exploratory data analysis on the same.
+
+The model will be trained using a unified document corpus compiled from the following three sources of text data:
+
+1. Blogs
+2. News
+3. Twitter
+
+The text data corpora are provided in four different languages. For this project, I will only focus on the English corpora.
+
+### Motivation for the project
+
+As mentioned on the task,  the motivation for this project is to: 
+1. Demonstrate that you've downloaded the data and have successfully loaded it in.
+2. Create a basic report of summary statistics about the data sets.
+3. Report any interesting findings that you amassed so far.
+4. Get feedback on your plans for creating a prediction algorithm and Shiny app. 
+
+### Tasks to be accomplished
+
+The following tasks are to be accomplished in this milestone report.
+
+1. **Task 1:**
+  * Download the dataset and load it in
+  
+2. **Task 2:**
+  * Create basic summary statistics
+  
+3. **Task 3:**
+  * Report interesting findings
+  
+4. **Task 4:**
+  * Give feedback on plan for prediction algorithm and Shiny app
+
+### TASK 1
+
+First, we will load all the necessary libraries.
+
+```{r load-libraries, message=FALSE, warning=FALSE}
+library(NLP)
+library(tm)
+library(RColorBrewer)
+library(wordcloud)
+library(dplyr)
+library(stringi)
+library(RWeka)
+library(ggplot2)
+library(ngram)
+library(quanteda)
+library(gridExtra)
+```
+
+Now, loading the downloaded training data.
+
+```{r load-data, echo = TRUE}
+# blogs
+blogs_file <- file("C:/Users/harsh/Desktop/en_US/en_US.blogs.txt","r")
+suppressWarnings(blogs <- readLines(blogs_file, encoding="UTF-8"))
+close(blogs_file)
+# news
+news_file <- file("C:/Users/harsh/Desktop/en_US/en_US.news.txt","r")
+suppressWarnings(news <- readLines(news_file, encoding="UTF-8"))
+close(news_file)
+# twitter
+twitter_file <- file("C:/Users/harsh/Desktop/en_US/en_US.twitter.txt","r")
+suppressWarnings(twitter <- readLines(twitter_file, encoding="UTF-8"))
+close(twitter_file)
+```
+
+### TASK 2 AND TASK 3
+
+Here's an overall summary of the data.
+
+```{r data-summary, echo = FALSE}
+summaryData <- sapply(list(blogs,news,twitter),function(x) summary(stri_count_words(x))[c('Min.','Mean','Max.')])
+rownames(summaryData) <- c('Min','Mean','Max')
+stats <- data.frame(
+  FileName=c("en_US.blogs","en_US.news","en_US.twitter"),      
+  t(rbind(sapply(list(blogs,news,twitter),stri_stats_general)[c('Lines','Chars'),],  Words=sapply(list(blogs,news,twitter),stri_stats_latex)['Words',], summaryData)))
+head(stats)
+```
+
+Here's a summary of the dataset.
+
+```{r data-summary-2, echo = FALSE}
+df<-data.frame(Doc = c("blogs", "news", "twitter"), Num.Lines = c(length(blogs), length(news), length(twitter)), Num.Words=c(sum(nchar(blogs)), sum(nchar(news)), sum(nchar(twitter))))
+df
+```
+
+Since the data files are huge in size and I only have limited computer memory to process them, I will sample the data by taking 0.1% of each dataset and then clean it. I will then use the cleaned data and combine it into one corpus which will be used for building the prediction model. 
+
+``` {r data-sampling, echo = FALSE}
+set.seed(1, sample.kind = "Rounding")
+sampleBlogs <- blogs[sample(1:length(blogs), 0.001*length(blogs), replace=FALSE)]
+sampleNews <- news[sample(1:length(news), 0.001*length(news), replace=FALSE)]
+sampleTwitter <- twitter[sample(1:length(twitter), 0.001*length(twitter), replace=FALSE)]
+sampleBlogs <- iconv(sampleBlogs, "UTF-8", "ASCII", sub="")
+sampleNews <- iconv(sampleNews, "UTF-8", "ASCII", sub="")
+sampleTwitter <- iconv(sampleTwitter, "UTF-8", "ASCII", sub="")
+data.sample <- c(sampleBlogs,sampleNews,sampleTwitter)
+build_corpus <- function (x = data.sample) {
+  sample_c <- VCorpus(VectorSource(x)) # Create corpus dataset
+  sample_c <- tm_map(sample_c, content_transformer(tolower)) # all lowercase
+  sample_c <- tm_map(sample_c, removePunctuation) # Eleminate punctuation
+  sample_c <- tm_map(sample_c, removeNumbers) # Eliminate numbers
+  sample_c <- tm_map(sample_c, stripWhitespace) # Strip Whitespace
+}
+corpusData <- build_corpus(data.sample)
+head(corpusData)
+```
+
+Now, here are some graphs in order to understand the data better.
+
+```{r exploratory-data-analysis-word-frequencies, message = FALSE, echo = FALSE}
+tdm <- TermDocumentMatrix(corpusData)
+freq <- sort(rowSums(as.matrix(tdm)), decreasing = TRUE)
+wordFreq <- data.frame(word = names(freq), freq = freq)
+g <- ggplot (wordFreq[1:10,], aes(x = reorder(wordFreq[1:10,]$word, -wordFreq[1:10,]$fre),
+                                  y = wordFreq[1:10,]$fre ))
+g <- g + geom_bar( stat = "Identity" , fill = I("grey50"))
+g <- g + geom_text(aes(label = wordFreq[1:10,]$fre), vjust = -0.20, size = 3)
+g <- g + xlab("")
+g <- g + ylab("Word Frequencies")
+g <- g + theme(plot.title = element_text(size = 14, hjust = 0.5, vjust = 0.5),
+               axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle = 45),
+               axis.text.y = element_text(hjust = 0.5, vjust = 0.5))
+g <- g + ggtitle("10 Most Frequent Words")
+print(g)
+```
+
+And a wordcloud.
+
+```{r exploratory-data-analysis-word-cloud, message = FALSE, echo = FALSE, warning = FALSE}
+set.seed(1, sample.kind = "Rounding")
+getTermTable <- function(corpusData, ngrams = 1, lowfreq = 50) {
+  tokenizer <- function(x) { 
+    NGramTokenizer(x, Weka_control(min = ngrams, max = ngrams)) 
+  }
+  tdm <- TermDocumentMatrix(corpusData, control = list(tokenize = tokenizer))
+  top_terms <- findFreqTerms(tdm,lowfreq)
+  top_terms_freq <- rowSums(as.matrix(tdm[top_terms,]))
+  top_terms_freq <- data.frame(word = names(top_terms_freq), frequency = top_terms_freq)
+  top_terms_freq <- arrange(top_terms_freq, desc(frequency))
+}
+    
+tt.Data <- list(3)
+for (i in 1:3) {
+  tt.Data[[i]] <- getTermTable(corpusData, ngrams = i, lowfreq = 10)
+}
+par(mfrow=c(1, 3))
+for (i in 1:3) {
+  wordcloud(tt.Data[[i]]$word, tt.Data[[i]]$frequency, scale = c(3,1), max.words=100, random.order=FALSE, rot.per=0, fixed.asp = TRUE, use.r.layout = FALSE, colorPallete="Greys")
+}
+
+```
+
+While creating the algorithm using n-grams, I plan to use unigrams, bigrams, and trigrams. Here are some summary statistics of the same.
+
+```{r exploratory-data-analysis-tokenize-n-grams, message = FALSE, echo = FALSE}
+plot.Grams <- function (x = tt.Data, N=10) {
+  g1 <- ggplot(data = head(x[[1]],N), aes(x = reorder(word, -frequency), y = frequency)) + 
+        geom_bar(stat = "identity", fill = "grey50") + 
+        ggtitle(paste("Unigrams")) + 
+        xlab("Unigrams") + ylab("Frequency") + 
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  g2 <- ggplot(data = head(x[[2]],N), aes(x = reorder(word, -frequency), y = frequency)) + 
+        geom_bar(stat = "identity", fill = "grey50") + 
+        ggtitle(paste("Bigrams")) + 
+        xlab("Bigrams") + ylab("Frequency") + 
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  g3 <- ggplot(data = head(x[[3]],N), aes(x = reorder(word, -frequency), y = frequency)) + 
+        geom_bar(stat = "identity", fill = "grey50") + 
+        ggtitle(paste("Trigrams")) + 
+        xlab("Trigrams") + ylab("Frequency") + 
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  gridExtra::grid.arrange(g1, g2, g3, ncol = 3)
+}
+plot.Grams(x = tt.Data, N = 20)
+```
+
+### TASK 4
+
+Here onward, I will work on the final deliverable of the capstone project which is to build a predictive algorithm that will be deployed as a Shiny app for the user interface and the Shiny app should take as input a phrase (multiple words) in a text box input and output a prediction of the next word.
+
+The predictive algorithm will be developed using an n-gram model with a word frequency lookup similar to that performed in the exploratory data analysis section of this report. A strategy will be built based on the knowledge gathered during the exploratory analysis. For example, as n increased for each n-gram, the frequency decreased for each of its terms. So one possible strategy may be to construct the model to first look for the unigram that would follow from the entered text. Once a full term is entered followed by a space, find the most common bigram model and so on.
+
+Another possible strategy may be to predict the next word using the trigram model. If no matching trigram can be found, then the algorithm would check the bigram model. If still not found, use the unigram model.
+
+The final strategy will be based on the one that increases efficiency and provides the best accuracy.
