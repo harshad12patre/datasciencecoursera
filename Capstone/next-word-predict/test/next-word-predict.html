@@ -367,21 +367,51 @@ summary {
 
 <div id="next-word-prediction-web-application" class="section level1">
 <h1>Next Word Prediction Web Application</h1>
-<p>author: Harshad Barapatre date: 16 May, 2021</p>
-<p>Data Science Specialization: Capstone Project<br /> By Johns Hopkins University<br /> On Coursera Platform<br /> ======================================================== # <strong>Objective</strong></p>
-<p><small> This presentation features the Next Word Predict app including an introduction to the application user interface and details about the text prediction algorithm.</p>
-<p>The Next Word Predict app is located at: The source code files can be found on GitHub: Check back regularly as the codebase is continually being updated with new features and improvements. </small></p>
-<p>======================================================== # <strong>Shiny Application</strong></p>
-<p><small> Next Word Predict is a Shiny app that uses a text prediction algorithm to predict the next word(s) based on text entered by a user.</p>
-<p>The application will suggest the next word in a sentence using an n-gram algorithm. An n-gram is a contiguous sequence of <em>n</em> words from a given sequence of text.</p>
-<p>The text used to build the predictive text model came from a large corpus of blogs, news and twitter data. N-grams were extracted from the corpus and then used to build the predictive text model.</p>
-<p>Various methods were explored to improve speed and accuracy using natural language processing and text mining techniques. </small></p>
-<p>======================================================== # <strong>The Predictive Text Model</strong></p>
-<p><small> The predictive text model was built from a sample of 800,000 lines extracted from the large corpus of blogs, news and twitter data.</p>
-<p>The sample data was then tokenized and cleaned using the <strong>tm</strong> package and a number of regular expressions using the <strong>gsub</strong> function. As part of the cleaning process the data was converted to lowercase, removed all non-ascii characters, URLs, email addresses, Twitter handles, hash tags, ordinal numbers, profane words, punctuation and whitespace. The data was then split into tokens (n-grams).</p>
-<p>As text is entered by the user, the algorithm iterates from longest n-gram (4-gram) to shortest (2-gram) to detect a match. The predicted next word is considered using the longest, most frequent matching n-gram. The algorithm makes use of a simple back-off strategy. </small></p>
-<p>======================================================== # <strong>Application User Interface</strong></p>
-<p><small> The predicted next word will be shown when the app detects that you have finished typing one or more words. When entering text, please allow a few seconds for the output to appear. Use the slider tool to select up to three next word predictions. The top prediction will be shown first followed by the second and third likely next words. Click the image below for a larger view of the user interface. </small></p>
+<p>author: Harshad Barapatre date: May 16, 2021 autosize: true</p>
+</br>
+<h4>
+Data Science Specialization: Capstone Project
+</h4>
+<h4>
+By John Hopkins University
+</h4>
+<h4>
+On Coursera Platform
+</h4>
+</div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p></br> </br> For this Capstone Project, I have created a Next Word Prediction Web Application using Natural Language Processing techniques.</p>
+<p>The link to the web application is <a href="https://harshad12patre.shinyapps.io/next-word-predictor/" class="uri">https://harshad12patre.shinyapps.io/next-word-predictor/</a></p>
+</div>
+<div id="getting-and-cleaning-data-and-eda" class="section level1">
+<h1>Getting and Cleaning Data and EDA</h1>
+<ul>
+<li>The data used to create this product was obtained from Swiftkey.</li>
+<li>The data contains text from Twitter, news, and blogs.</li>
+<li>The text from these corpora were cleaned and combined into one large corpus.</li>
+<li>Text in the corpus was converted to lower case, stripped of white space, gotten rid of punctuation and special characters, and profane words were removed.</li>
+<li>Tokenization of data (unigrams, bigrams, trigrams, and quadgrams).</li>
+<li>Bar Graphs and Word Cloud to understand the n-grams better.</li>
+</ul>
+</div>
+<div id="next-word-prediction-model" class="section level1">
+<h1>Next Word Prediction Model</h1>
+<ul>
+<li>n-grams were loaded from saved .Rds file (unigrams, bigrams, trigrams, and quadgrams).</li>
+<li>The prediction is initially based on the quadgrams (Predict fourth word).</li>
+<li>If that fails, the model uses a backoff strategy to lower n-gram i.e. trigram.</li>
+<li>If that fails too, the model will use bigrams.</li>
+<li>Unigrams are not used to predict the next word.</li>
+</ul>
+</div>
+<div id="how-to-use-web-application" class="section level1">
+<h1>How to Use Web Application</h1>
+<ol style="list-style-type: decimal">
+<li>When the application loads up, click on the text input field and wait until “NULL” is displayed as prediction. Once it is done, the web app is ready to run.</li>
+<li>Enter a partially complete sentence to get prediction.</li>
+</ol>
+<p>The link to the web application is <a href="https://harshad12patre.shinyapps.io/next-word-predictor/" class="uri">https://harshad12patre.shinyapps.io/next-word-predictor/</a></p>
 </div>
 
 

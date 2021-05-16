@@ -24,11 +24,9 @@ Getting and Cleaning Data and EDA
 - The data used to create this product was obtained from Swiftkey. 
 - The data contains text from Twitter, news, and blogs.
 - The text from these corpora were cleaned and combined into one large corpus.
-- Only 0.1% of this corpus was used to train the model so as to not take a toll on the available computing resources.
 - Text in the corpus was converted to lower case, stripped of white space, gotten rid of punctuation and special characters, and profane words were removed.
 - Tokenization of data (unigrams, bigrams, trigrams, and quadgrams).
-- Bar Graphs to understand most used n-grams.
-- Word Cloud to understand the n-grams better.
+- Bar Graphs and Word Cloud to understand the n-grams better.
 
 
 Next Word Prediction Model
