@@ -1,0 +1,13 @@
+name: next-word-predictor
+title: next-word-predictor
+username:
+account: harshad12patre
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4138574
+bundleId: 4603592
+url: https://harshad12patre.shinyapps.io/next-word-predictor/
+when: 1621164011.4581
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: previus.R
