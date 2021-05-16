@@ -1,0 +1,14 @@
+This web application is the capstone project for the **Data Science Specialization** offered by John Hopkins University on the Coursera platform.
+
+The application uses Natural Language Processing to predict the next word in a partially typed sentence.
+
+#### Goals of the Project: 
+
+1.  The Shiny app should contain a text input box that and run on shinyapps.io
+2.  The application should be able to accept input
+3.  When a phrase is typed in the input box, the app should give a prediction of a single word after a suitable delay for the model to compute the answer.
+
+#### How to Use
+
+1.  When the application loads up, click on the text input field and wait until **"NULL"** is displayed as prediction. Once it is done, the web app is ready to run.
+2.  Enter a partially complete sentence to get prediction.
