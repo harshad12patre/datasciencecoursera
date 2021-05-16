@@ -2,7 +2,7 @@ suppressWarnings(library(shiny))
 suppressWarnings(library(markdown))
 shinyUI(navbarPage("Data Science Capstone: Course Project",
                    tabPanel("Web App",
-                            HTML("<H1> Next Word Prediction Web Application</H1>"),
+                            HTML("<H1>Next Word Prediction Web Application</H1>"),
                             br(),
                             br(),
                             sidebarLayout(
